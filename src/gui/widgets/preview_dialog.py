@@ -1,6 +1,6 @@
 import os
 from typing import Optional
-
+from PIL import Image
 import cv2 as cv
 import numpy as np
 from PySide6.QtCore import Qt
@@ -24,18 +24,18 @@ class PreviewDialog(QDialog):
         rgbm_image: np.ndarray,
         parent: Optional[object] = None,
     ) -> None:
-        super().__init__(parent)
+        super().__init__()
         self.setWindowTitle(f"Preview - {os.path.basename(image_path)}")
         self.resize(800, 600)
 
         layout = QVBoxLayout(self)
 
         title = QLabel(os.path.basename(image_path), self)
-        title.setAlignment(Qt.AlignCenter)
+        title.setAlignment(Qt.AlignmentFlag.AlignCenter)
         layout.addWidget(title)
 
         self._image_label = QLabel(self)
-        self._image_label.setAlignment(Qt.AlignCenter)
+        self._image_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         layout.addWidget(self._image_label, stretch=1)
 
         # Barra de botões abaixo da imagem
@@ -65,14 +65,13 @@ class PreviewDialog(QDialog):
         self._apply_default_lut()
 
     def _set_image(self, rgbm_image: np.ndarray) -> None:
-        h, w, ch = rgbm_image.shape
-        bytes_per_line = ch * w
+        img = Image.fromarray(rgbm_image)
+        w, h = img.size
         qimage = QImage(
-            rgbm_image.data,
+            img.tobytes("raw", "RGBA"),
             w,
             h,
-            bytes_per_line,
-            QImage.Format_RGBA8888,
+            QImage.Format.Format_RGBA8888,
         )
         self._original_pixmap = QPixmap.fromImage(qimage)
         self._update_scaled_pixmap()
@@ -82,8 +81,8 @@ class PreviewDialog(QDialog):
             return
         scaled = self._original_pixmap.scaled(
             self._image_label.size(),
-            Qt.KeepAspectRatio,
-            Qt.SmoothTransformation,
+            Qt.AspectRatioMode.KeepAspectRatio,
+            Qt.TransformationMode.SmoothTransformation,
         )
         self._image_label.setPixmap(scaled)
 
@@ -99,7 +98,6 @@ class PreviewDialog(QDialog):
 
         lut_path = os.path.join("assets", "AgX.png")
         if not os.path.exists(lut_path):
-            # Sem LUT padrão, mostra apenas a imagem base
             self._set_image(self._base_image)
             return
 
@@ -120,16 +118,7 @@ class PreviewDialog(QDialog):
 
         # Aplica LUT sobre a imagem base
         lut_image = self._current_lut.apply(self._base_image)
-
-        # Garante formato uint8 RGBA para o QImage, se necessário
-        if lut_image.dtype != np.uint8:
-            lut_image = np.clip(lut_image * 255.0, 0, 255).astype(np.uint8)
-
-        # Se vier RGB, converte para RGBA adicionando alpha=255
-        if lut_image.shape[2] == 3:
-            alpha = np.full(lut_image.shape[:2] + (1,), 255, dtype=np.uint8)
-            lut_image = np.concatenate([lut_image, alpha], axis=2)
-
+        lut_image = lut_image.astype(np.uint8)
         self._set_image(lut_image)
 
     def _on_load_lut_clicked(self) -> None:

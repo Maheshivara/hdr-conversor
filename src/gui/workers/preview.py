@@ -40,13 +40,7 @@ class PreviewWorker(ConversionWorker):
             effect.id: (effect.enabled, effect.value) for effect in self.effects
         }
         image = self.transformer.apply_effects(image, effects_dict)
-
-        rgbm_image = (
-            self.encoder.from_exr(image)
-            if image_path.lower().endswith(".exr")
-            else self.encoder.from_hdr(image)
-        )
-        return rgbm_image
+        return image
 
     def run(self) -> None:
         try:
