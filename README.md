@@ -16,9 +16,9 @@ The group of contributors:
 > This project uses [uv](https://docs.astral.sh/uv/) as its package manager. All steps described below assume that you have it installed and configured.
 
 > [!IMPORTANT]  
-> You will also need Python version **3.14** (or later). You can install it with the command:
+> You will also need Python version **3.13** (or later). You can install it with the command:
 > ```sh
-> uv python install 3.14
+> uv python install 3.13
 > ```
 
 1. Clone this repository to your desired location.  
