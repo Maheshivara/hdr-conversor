@@ -1,5 +1,6 @@
 import numpy as np
 from typing import List
+
 from core.enums.effect_id import EffectID
 
 
@@ -51,6 +52,7 @@ class EffectsTransformer:
             adjusted = adjusted**2.2  # Decode back to linear space
 
             return adjusted
+
         return image
 
     def apply_effects(self, image: np.ndarray, effects: List[EffectInfo]) -> np.ndarray:
@@ -61,17 +63,14 @@ class EffectsTransformer:
                 continue
 
             elif effect.effect_id == EffectID.EXPOSURE:
-                print("Applying exposure:", effect.value)
                 transformed_image = self.adjust_exposure(
                     transformed_image, effect.value
                 )
             elif effect.effect_id == EffectID.SATURATION:
-                print("Applying saturation:", effect.value)
                 transformed_image = self.adjust_saturation(
                     transformed_image, effect.value
                 )
             elif effect.effect_id == EffectID.BLACK_LEVEL:
-                print("Applying black level:", effect.value)
                 transformed_image = self.adjust_black_level(
                     transformed_image, effect.value
                 )
