@@ -1,20 +1,12 @@
 import os
 
 from PySide6.QtCore import QObject, Signal
-from typing import Set, Tuple
+from typing import List, Set
 
 from core.readers.image import ImageReader
 from core.writers.image import ImageWriter
 from core.encoders.rgbm import RGBMEncoder
-from core.enums.effect_id import EffectID
-from core.transformers.effects import EffectsTransformer
-
-
-class EffectInfo:
-    def __init__(self, id: EffectID, enabled: bool, value: float):
-        self.id = id
-        self.enabled = enabled
-        self.value = value
+from core.transformers.effects import EffectsTransformer, EffectInfo
 
 
 class ConversionWorker(QObject):
@@ -29,7 +21,7 @@ class ConversionWorker(QObject):
         rgbm_coefficient: float,
         to_png: bool,
         to_dds: bool,
-        effects: Set[EffectInfo],
+        effects: List[EffectInfo],
         parent=None,
     ):
         super().__init__(parent)
@@ -45,25 +37,26 @@ class ConversionWorker(QObject):
         self.transformer = EffectsTransformer()
         self.encoder = RGBMEncoder(self.rgbm_coefficient)
 
+    def _process_single_image(self, image_path: str):
+        """Lê, aplica efeitos e converte uma única imagem para RGBM."""
+        image = self.reader.read_image(image_path)
+        if image is None:
+            raise RuntimeError(f"Failed to read image: {image_path}")
+
+        image = self.transformer.apply_effects(image, self.effects)
+
+        rgbm_image = (
+            self.encoder.from_exr(image)
+            if image_path.lower().endswith(".exr")
+            else self.encoder.from_hdr(image)
+        )
+        return rgbm_image
+
     def run(self):
         img_count = 0
         for image_path in self.image_paths:
             try:
-                image = self.reader.read_image(image_path)
-                if image is None:
-                    self.error.emit(f"Failed to read image: {image_path}")
-                    continue
-
-                effects_dict = {
-                    effect.id: (effect.enabled, effect.value) for effect in self.effects
-                }
-                image = self.transformer.apply_effects(image, effects_dict)
-
-                rgbm_image = (
-                    self.encoder.from_exr(image)
-                    if image_path.lower().endswith(".exr")
-                    else self.encoder.from_hdr(image)
-                )
+                rgbm_image = self._process_single_image(image_path)
 
                 base = os.path.splitext(os.path.basename(image_path))[0]
                 if self.to_dds:

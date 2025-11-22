@@ -1,4 +1,5 @@
 import numpy as np
+import cv2 as cv
 
 
 class LutTransformer:
@@ -46,8 +47,8 @@ class LutTransformer:
         plane_0 = self._linear_interpolate(line_00, line_01, g2)
         plane_1 = self._linear_interpolate(line_10, line_11, g2)
 
-        result = self._linear_interpolate(plane_0, plane_1, b2)
-
+        cube = self._linear_interpolate(plane_0, plane_1, b2)
+        result = cv.cvtColor(cube, cv.COLOR_BGRA2RGBA)
         return result
 
     def _compress_hdr(self, image: np.ndarray) -> np.ndarray:
