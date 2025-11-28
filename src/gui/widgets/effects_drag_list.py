@@ -24,6 +24,7 @@ class EffectsDragList(QListWidget):
             self.effects_items.append(item)
         self.clearSelection()
         self.setSizeAdjustPolicy(QListWidget.SizeAdjustPolicy.AdjustToContents)
+        self.adjustSize()
 
     def dropEvent(self, event):
         super().dropEvent(event)

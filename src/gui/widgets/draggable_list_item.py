@@ -1,4 +1,4 @@
-from PySide6.QtWidgets import QWidget, QHBoxLayout
+from PySide6.QtWidgets import QWidget, QHBoxLayout, QSizePolicy
 from PySide6.QtGui import QDragEnterEvent, QDropEvent
 from PySide6.QtSvgWidgets import QSvgWidget
 
@@ -18,9 +18,12 @@ class DraggableListItem(QWidget):
         svg_path = path.join(Paths.ICONS_DIR, "drag_handle.svg")
         drag_handle = QSvgWidget(svg_path)
         drag_handle.setFixedSize(24, 24)
+        drag_handle.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
         layout.addWidget(drag_handle)
-
         self.setLayout(layout)
+        self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
+        self.effect_box.adjustSize()
+        self.adjustSize()
 
     def dragEnterEvent(self, event: QDragEnterEvent):
         event.accept()
