@@ -4,7 +4,6 @@ from PySide6.QtWidgets import (
     QWidget,
     QGridLayout,
     QPushButton,
-    QFileDialog,
     QMessageBox,
     QProgressBar,
     QListWidget,
@@ -21,6 +20,7 @@ from gui.widgets.output_image_check import OutputImageCheckWidget
 from gui.widgets.effect_spin_box import EffectSpinBox
 from gui.widgets.effects_drag_list import EffectsDragList
 from gui.widgets.output_path_box import OutputPathBox
+from gui.widgets.select_files import SelectFilesWidget
 from gui.workers.conversion import ConversionWorker
 from gui.workers.preview import PreviewWorker
 
@@ -94,19 +94,8 @@ class HomeScreen(QWidget):
         )
         layout.addWidget(self.effects_drag_list, 0, 3, 4, 1)
 
-        self.load_images_button = QPushButton("Load Images")
-        self.load_images_button.clicked.connect(self.load_image)
-        self.load_images_button.setSizePolicy(
-            QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed
-        )
-        layout.addWidget(self.load_images_button, 4, 0)
-
-        self.load_directory_button = QPushButton("Load Directory")
-        self.load_directory_button.clicked.connect(self.load_directory)
-        self.load_directory_button.setSizePolicy(
-            QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed
-        )
-        layout.addWidget(self.load_directory_button, 4, 1)
+        self.select_files_widget = SelectFilesWidget(self.selected_images_controller)
+        layout.addWidget(self.select_files_widget, 4, 0, 1, 3)
 
         self.rgbm_coefficient_widget = RGBMCoefficientWidget()
         self.rgbm_coefficient_widget.setSizePolicy(
@@ -121,55 +110,12 @@ class HomeScreen(QWidget):
         self.output_image_check_widget.setSizePolicy(
             QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed
         )
-        layout.addWidget(self.output_image_check_widget, 7, 0, 1, 4)
+        layout.addWidget(self.output_image_check_widget, 7, 0, 1, 3)
 
         self.to_rgbm_button = QPushButton("Convert to RGBM")
         self.to_rgbm_button.clicked.connect(self.convert_to_rgbm)
         layout.addWidget(self.to_rgbm_button, 8, 3, 1, 1)
-
-    def load_image(self):
-        file_dialog = QFileDialog(self)
-        file_dialog.setNameFilter("HDR Images (*.exr *.hdr)")
-        if file_dialog.exec():
-            selected_files = file_dialog.selectedFiles()
-            if selected_files:
-                for image_path in selected_files:
-                    if (
-                        image_path
-                        not in self.selected_images_controller.selected_images
-                    ):
-                        self.selected_images_controller.add_image(image_path)
-
-                if not self.selected_images_controller.selected_images:
-                    QMessageBox.critical(
-                        self,
-                        "Error",
-                        "Failed to select images.",
-                    )
-
-    def load_directory(self):
-        directory = QFileDialog.getExistingDirectory(
-            self,
-            "Select Image Directory",
-            "",
-        )
-        if directory:
-            supported_extensions = (".exr", ".hdr")
-            for filename in os.listdir(directory):
-                if filename.lower().endswith(supported_extensions):
-                    image_path = os.path.join(directory, filename)
-                    if (
-                        image_path
-                        not in self.selected_images_controller.selected_images
-                    ):
-                        self.selected_images_controller.add_image(image_path)
-
-            if not self.selected_images_controller.selected_images:
-                QMessageBox.critical(
-                    self,
-                    "Error",
-                    "No supported images found in the selected directory.",
-                )
+        self.setLayout(layout)
 
     def update_image_list(self):
         self.image_list_widget.clear()
@@ -334,7 +280,6 @@ class HomeScreen(QWidget):
 
     def _on_preview_finished(self, rgbm_image):
         """Slot chamado quando o PreviewWorker termina o processamento."""
-        print("Preview finished")
         image_path = getattr(self, "_last_preview_image_path", "")
         if rgbm_image is None or (hasattr(rgbm_image, "size") and rgbm_image.size == 0):
             QMessageBox.critical(self, "Error", "Preview failed: invalid image.")
