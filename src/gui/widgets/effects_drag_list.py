@@ -24,15 +24,6 @@ class EffectsDragList(QListWidget):
             self.effects_items.append(item)
         self.clearSelection()
         self.setSizeAdjustPolicy(QListWidget.SizeAdjustPolicy.AdjustToContents)
-        self.setStyleSheet(
-            """
-            QListWidget::item {
-                border: 1px solid #a9b1d6;
-                border-radius: 4px;
-                padding: 4px;
-            }
-            """
-        )
 
     def dropEvent(self, event):
         super().dropEvent(event)
