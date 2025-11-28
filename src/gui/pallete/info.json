@@ -1,0 +1,24 @@
+{
+  "palette": {
+    "Window": "#1a1b26",
+    "Base": "#1a1b26",
+    "ToolTipBase": "#1f2335",
+    "Button": "#1f2335",
+    "HighlightedText": "#c0caf5",
+    "WindowText": "#a9b1d6",
+    "Text": "#a9b1d6",
+    "ButtonText": "#a9b1d6",
+    "ToolTipText": "#a9b1d6",
+    "PlaceholderText": "#565f89",
+    "BrightText": "#c0caf5",
+    "Link": "#7dcfff",
+    "AlternateBase": "#1e2030",
+    "Light": "#2a2f45",
+    "Midlight": "#252a3e",
+    "Shadow": "#0d0e18",
+    "Mid": "#171a23",
+    "LinkVisited": "#7aa2f7",
+    "Dark": "#090a10",
+    "Highlight": "#2ac3de"
+  }
+}
