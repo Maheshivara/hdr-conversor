@@ -322,7 +322,7 @@ class HomeScreen(QWidget):
         worker.finished.connect(thread.quit)
         worker.finished.connect(worker.deleteLater)
         thread.finished.connect(thread.deleteLater)
-        worker.error.connect(lambda msg: QMessageBox.critical(self, "Error", msg))
+        worker.error.connect(self._on_preview_error)
 
         # manter referências para evitar coleta de lixo enquanto a thread roda
         self._preview_worker = worker
@@ -334,6 +334,15 @@ class HomeScreen(QWidget):
 
     def _on_preview_finished(self, rgbm_image):
         """Slot chamado quando o PreviewWorker termina o processamento."""
+        print("Preview finished")
         image_path = getattr(self, "_last_preview_image_path", "")
+        if rgbm_image is None or (hasattr(rgbm_image, "size") and rgbm_image.size == 0):
+            QMessageBox.critical(self, "Error", "Preview failed: invalid image.")
+            return
         dialog = PreviewDialog(image_path, rgbm_image, self)
         dialog.exec()
+
+    def _on_preview_error(self, message: str):
+        QMessageBox.critical(self, "Error", f"Preview failed: {message}")
+        if hasattr(self, "_preview_thread"):
+            self._preview_thread.quit()
