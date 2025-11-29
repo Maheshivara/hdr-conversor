@@ -12,8 +12,14 @@ def get_custom_palette() -> QPalette:
 
     palette = QPalette()
 
-    for role_name, color_hex in palette_data.items():
+    for role_name, color_hex in palette_data["normal"].items():
         role = getattr(QPalette, role_name, None)
         if role is not None:
             palette.setColor(role, color_hex)
+
+    for role_name, color_hex in palette_data["disabled"].items():
+        role = getattr(QPalette, role_name, None)
+        if role is not None:
+            palette.setColor(QPalette.ColorGroup.Disabled, role, color_hex)
+
     return palette

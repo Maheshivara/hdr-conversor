@@ -36,6 +36,7 @@ class EffectSpinBox(QWidget):
         layout.addWidget(self.enabled_checkbox)
 
         self.label = QLabel(spinbox_label)
+        self.label.setEnabled(False)
         layout.addWidget(self.label)
 
         self.effect_spinbox = QDoubleSpinBox()
@@ -56,4 +57,5 @@ class EffectSpinBox(QWidget):
 
     def _on_enabled_changed(self, state):
         self.effect_spinbox.setEnabled(Qt.CheckState(state) == Qt.CheckState.Checked)
+        self.label.setEnabled(Qt.CheckState(state) == Qt.CheckState.Checked)
         self.effect_spinbox.setValue(self.default_value)
