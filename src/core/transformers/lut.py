@@ -80,13 +80,13 @@ class LutTransformer:
         C_3 = (2392.0 * 32.0) / 4096.0
 
         l_col = image / max_pq
-        pow_col = np.power(l_col, N)
+        pow_col = l_col**N
         del l_col
         num = C_1 + C_2 * pow_col
         den = 1.0 + C_3 * pow_col
         del pow_col
 
-        linear_pq = np.power(num / den, M)
+        linear_pq = (num / den) ** M
         del num, den
         result = np.clip(linear_pq, 0.0, 1.0)
 
