@@ -46,12 +46,12 @@ class ConversionWorker(QObject):
 
         image = self.transformer.apply_effects(image, self.effects)
 
-        rgbm_image = (
+        image = (
             self.encoder.from_exr(image)
             if image_path.lower().endswith(".exr")
             else self.encoder.from_hdr(image)
         )
-        return rgbm_image
+        return image
 
     def run(self):
         img_count = 0
@@ -78,6 +78,7 @@ class ConversionWorker(QObject):
                     self.writer.write_as_png(output_filepath, rgbm_image)
                     img_count += 1
                     self.progress.emit(img_count)
+                del rgbm_image
 
             except Exception as e:
                 self.error.emit(str(e))

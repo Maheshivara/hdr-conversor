@@ -9,12 +9,12 @@ class RGBMEncoder:
         self.effects_transformer = EffectsTransformer()
 
     def from_hdr(self, hdr_image: np.ndarray) -> np.ndarray:
-        corrected_image = self.effects_transformer.apply_gamma_correction(
+        hdr_image = self.effects_transformer.apply_gamma_correction(
             hdr_image, gamma=2.2
         )
 
-        color = corrected_image[..., :3] / self.coefficient
-
+        color = hdr_image[..., :3] / self.coefficient
+        del hdr_image
         alpha = np.maximum(
             np.maximum(color[..., 0], color[..., 1]), np.maximum(color[..., 2], 1e-6)
         )
@@ -23,14 +23,15 @@ class RGBMEncoder:
         alpha = np.ceil(alpha * 255.0) / 255.0
 
         alpha_exp = alpha[..., np.newaxis]
+        del alpha
         rgb = color / alpha_exp
 
         encoded_image = np.concatenate([rgb, alpha_exp], axis=-1)
-
+        del rgb, alpha_exp
         output_image = np.clip(encoded_image, 0.0, 1.0) * 255
 
         return output_image.astype(np.uint8)
 
     def from_exr(self, input_img: np.ndarray) -> np.ndarray:
-        exr_image = np.clip(input_img, 0.0, None)
-        return self.from_hdr(exr_image)
+        input_img = np.clip(input_img, 0.0, None)
+        return self.from_hdr(input_img)

@@ -21,6 +21,8 @@ class LutTransformer:
         img_ceil = np.clip(img_floor + 1, None, self.lut_size - 1)
         img_fract = remapped - img_floor
 
+        del remapped
+
         b0 = img_floor[..., 0].astype(np.uint8)
         g0 = img_floor[..., 1].astype(np.uint8)
         r0 = img_floor[..., 2].astype(np.uint8)
@@ -30,6 +32,7 @@ class LutTransformer:
         b2 = img_fract[..., 0].astype(np.float32)
         g2 = img_fract[..., 1].astype(np.float32)
         r2 = img_fract[..., 2].astype(np.float32)
+        del img_floor, img_ceil, img_fract
 
         point_000 = self.lut_3d[b0, g0, r0, :]
         point_001 = self.lut_3d[b0, g0, r1, :]
@@ -39,16 +42,31 @@ class LutTransformer:
         point_101 = self.lut_3d[b1, g0, r1, :]
         point_110 = self.lut_3d[b1, g1, r0, :]
         point_111 = self.lut_3d[b1, g1, r1, :]
+        del b0, g0, r0, b1, g1, r1
 
         line_00 = self._linear_interpolate(point_000, point_001, r2)
         line_01 = self._linear_interpolate(point_010, point_011, r2)
         line_10 = self._linear_interpolate(point_100, point_101, r2)
         line_11 = self._linear_interpolate(point_110, point_111, r2)
+        del (
+            point_000,
+            point_001,
+            point_010,
+            point_011,
+            point_100,
+            point_101,
+            point_110,
+            point_111,
+            r2,
+        )
 
         plane_0 = self._linear_interpolate(line_00, line_01, g2)
         plane_1 = self._linear_interpolate(line_10, line_11, g2)
+        del line_00, line_01, line_10, line_11, g2
 
         cube = self._linear_interpolate(plane_0, plane_1, b2)
+        del plane_0, plane_1, b2
+
         result = cv.cvtColor(cube, cv.COLOR_BGRA2RGBA)
         return result
 
@@ -63,10 +81,13 @@ class LutTransformer:
 
         l_col = image / max_pq
         pow_col = np.power(l_col, N)
+        del l_col
         num = C_1 + C_2 * pow_col
         den = 1.0 + C_3 * pow_col
+        del pow_col
 
         linear_pq = np.power(num / den, M)
+        del num, den
         result = np.clip(linear_pq, 0.0, 1.0)
 
         return result
