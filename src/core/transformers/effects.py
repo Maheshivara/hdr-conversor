@@ -18,6 +18,7 @@ class EffectsTransformer:
     def apply_gamma_correction(self, image: np.ndarray, gamma: float) -> np.ndarray:
         if gamma <= 0.0:
             raise ValueError("Gamma must be greater than 0.")
+        image = self._clip_image(image)
         return image.astype(np.float32) ** float(1.0 / gamma)
 
     def revert_gamma_correction(self, image: np.ndarray, gamma: float) -> np.ndarray:
