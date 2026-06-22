@@ -48,3 +48,15 @@ The group of contributors:
             ```
     2. For Windows, the file will be named `main.exe`.
     3. We do not have a Mac to build, but the name should be `main`, as on Linux
+
+### How to Contribute
+
+1. Run the `pre-commit` tool with uv:
+    ```bash
+    uv run pre-commit install
+    ```
+2. Checkout to the `dev` branch and create your branch from there:
+    ```bash
+    git checkout -b my/very-cool-branch dev
+    ```
+3. Code and make a pull request to be merged into the `dev` again.
