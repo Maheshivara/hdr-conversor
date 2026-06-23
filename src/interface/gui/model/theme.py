@@ -33,13 +33,7 @@ class ThemePalette:
 
 @dataclass
 class Theme:
-    name: dict[str, str]
     palette: ThemePalette
-
-    def localized_name(self, locale: str = "en_US") -> str:
-        if isinstance(self.name, dict):
-            return self.name.get(locale) or next(iter(self.name.values()), "")
-        return str(self.name)
 
 
 def theme_object_hook(d: dict):
@@ -49,7 +43,7 @@ def theme_object_hook(d: dict):
 
     if "disabled" in d and "normal" in d:
         return ThemePalette(disabled=d["disabled"], normal=d["normal"])
-    if "name" in d and "palette" in d:
-        return Theme(name=d["name"], palette=d["palette"])
+    if "palette" in d:
+        return Theme(palette=d["palette"])
 
     return d

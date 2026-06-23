@@ -32,7 +32,6 @@ class ThemeManager:
             if theme is None:
                 continue
             themes[file[:-5]] = theme
-
         return themes
 
     def _load_theme(self, theme_file: str) -> Theme | None:
@@ -42,7 +41,6 @@ class ThemeManager:
         try:
             with open(theme_path, "r") as t:
                 loaded = json.load(t, object_hook=theme_object_hook)
-
             return loaded if isinstance(loaded, Theme) else None
 
         except Exception:
@@ -137,12 +135,8 @@ class ThemeManager:
 
         return palette
 
-    def get_themes_options(self, lang: Optional[str]) -> list[tuple[str, str]]:
-        if lang is None:
-            lang = "en_US"
-        return [
-            (key, theme.localized_name(lang)) for key, theme in self._availables.items()
-        ]
+    def get_themes_options(self) -> list[str]:
+        return list(self._availables.keys())
 
     def set_current_theme(self, theme_name: str) -> bool:
         if theme_name == self._current[0]:

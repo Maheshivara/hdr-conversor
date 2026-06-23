@@ -1,8 +1,4 @@
 {
-  "name": {
-    "en_US": "Default",
-    "pt_BR": "Padrão"
-  },
   "palette": {
     "disabled": {
       "AlternateBase": "#1d222a",
