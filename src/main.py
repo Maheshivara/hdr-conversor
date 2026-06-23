@@ -1,16 +1,11 @@
 import sys
 
-from gui.app import HDRApp
-from gui.palette.custom_palette import get_custom_palette
-from gui.fonts.load_font import load_font
+from interface.gui.main import AppGui
 
 
 def main():
-    app = HDRApp(sys.argv)
-    font = load_font()
-    app.setFont(font)
-    app.setPalette(get_custom_palette())
-    app.home_screen.show()
+    app = AppGui(sys.argv)
+    app.start()
     sys.exit(app.exec())
 
 
