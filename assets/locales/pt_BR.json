@@ -1,0 +1,16 @@
+{
+  "themes": {
+    "default": "Padrão"
+  },
+  "languages": {
+    "en_US": "Inglês (EUA)",
+    "pt_BR": "Português (BR)"
+  },
+  "ui": {
+    "menu": {
+      "theme": "Tema",
+      "settings": "Configurações",
+      "language": "Lingua"
+    }
+  }
+}

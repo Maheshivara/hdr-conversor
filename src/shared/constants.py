@@ -26,3 +26,4 @@ class DefaultPath:
     LUTS_DIR = Path(path.join(ASSETS_DIR, "LUTs"))
     FONTS_DIR = Path(path.join(ASSETS_DIR, "fonts"))
     PALETTES_DIR = Path(path.join(ASSETS_DIR, "palettes"))
+    LOCALES_DIR = Path(path.join(ASSETS_DIR, "locales"))

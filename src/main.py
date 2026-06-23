@@ -1,6 +1,6 @@
 import sys
 
-from interface.gui.main import AppGui
+from interface.gui.app import AppGui
 
 
 def main():

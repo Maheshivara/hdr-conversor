@@ -3,12 +3,13 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
+from interface.gui.viewmodel.home_screen import HomeScreenViewModel
+
 
 class HomeScreen(QWidget):
-    def __init__(self):
+    def __init__(self, view_model: HomeScreenViewModel):
         super().__init__()
-        self.setGeometry(100, 100, 900, 700)
-
+        self._view_model = view_model
         layout = QGridLayout()
         self.grid_layout = layout
         layout.setColumnStretch(0, 1)

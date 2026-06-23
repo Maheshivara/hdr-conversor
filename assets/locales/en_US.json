@@ -1,0 +1,16 @@
+{
+  "themes": {
+    "default": "Default"
+  },
+  "languages": {
+    "en_US": "English (US)",
+    "pt_BR": "Brazilian Portuguese"
+  },
+  "ui": {
+    "menu": {
+      "theme": "Theme",
+      "settings": "Settings",
+      "language": "Language"
+    }
+  }
+}
