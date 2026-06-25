@@ -4,6 +4,8 @@ from PySide6.QtWidgets import (
     QDoubleSpinBox,
     QHBoxLayout,
     QLabel,
+    QListWidget,
+    QListWidgetItem,
     QMenu,
     QPushButton,
     QVBoxLayout,
@@ -38,7 +40,15 @@ class Encoder(QWidget):
         self._build_encoders_menu()
 
         self._control_widget = QWidget()
+        self._control_widget_layout = QVBoxLayout()
+        self._encoder_control_label = QLabel()
+        self._encoder_control_inputs = QListWidget()
         self._build_encoder_control()
+
+        self._control_widget_layout.addWidget(self._encoder_control_label)
+        self._control_widget_layout.addWidget(self._encoder_control_inputs)
+
+        self._control_widget.setLayout(self._control_widget_layout)
 
         self._layout.addWidget(self._encoders_btn)
         self._layout.addWidget(self._control_widget)
@@ -61,21 +71,24 @@ class Encoder(QWidget):
             self._encoders_menu.addAction(action)
 
     def _build_encoder_control(self):
+        self._encoder_control_inputs.clear()
 
-        widget_layout = QVBoxLayout()
         current = self._view_model.get_current()
         name = self._view_model.t(f"ui.home.encoders.names.{current[0]}")
-        label = QLabel()
-        label.setText(name)
-        widget_layout.addWidget(label)
+        self._encoder_control_label.setText(name)
         inputs = current[1].get_inputs()
 
+        show = len(inputs) > 0
+        self._encoder_control_inputs.setVisible(show)
+        self._encoder_control_inputs.setDisabled(not show)
+
         for key, input in inputs.items():
+            item = QListWidgetItem()
             if isinstance(input, FloatInput):
                 input_widget = self._build_float(key, input)
-                widget_layout.addWidget(input_widget)
-
-        self._control_widget.setLayout(widget_layout)
+                item.setSizeHint(input_widget.sizeHint())
+                self._encoder_control_inputs.addItem(item)
+                self._encoder_control_inputs.setItemWidget(item, input_widget)
 
     def _build_float(self, name: str, i: FloatInput) -> QWidget:
         label = QLabel()
