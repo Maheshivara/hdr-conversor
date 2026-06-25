@@ -6,7 +6,7 @@ from shared.constants import DefaultPath
 
 
 class LanguageManager:
-    def __init__(self, default_lang: Optional[str]) -> None:
+    def __init__(self, default_lang: Optional[str] = None) -> None:
         self._default = default_lang or "en_US"
 
         self._locales_dir = DefaultPath.LOCALES_DIR

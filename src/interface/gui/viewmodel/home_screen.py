@@ -9,7 +9,7 @@ class HomeScreenViewModel(QObject):
     changed_theme = Signal()
     changed_language = Signal()
 
-    def __init__(self, model: SettingsModel, parent: Optional[QObject]) -> None:
+    def __init__(self, model: SettingsModel, parent: Optional[QObject] = None) -> None:
         super().__init__(parent)
         self._model = model
         self._model.language_changed.connect(self.changed_language)

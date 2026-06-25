@@ -15,8 +15,8 @@ class SettingsModel(QObject):
     def __init__(
         self,
         on_theme_changed: Callable[[], None],
-        theme: Optional[str],
-        language: Optional[str],
+        theme: Optional[str] = None,
+        language: Optional[str] = None,
     ) -> None:
         super().__init__()
         self.on_theme_changed = on_theme_changed

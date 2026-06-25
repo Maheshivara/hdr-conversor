@@ -9,7 +9,7 @@ from shared.constants import DefaultPath
 
 
 class ThemeManager:
-    def __init__(self, default_theme: Optional[str]) -> None:
+    def __init__(self, default_theme: Optional[str] = None) -> None:
         self._default = default_theme or "default"
         self._palettes_dir = DefaultPath.PALETTES_DIR
         self._availables = self._get_available_themes()

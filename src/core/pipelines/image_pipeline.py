@@ -4,7 +4,7 @@ from core.models.image import Image
 
 class ImagePipeline:
     def __init__(self):
-        self._stages: dict[int, ImageFilter] = {}
+        self._stages: dict[int, ImageFilter] = dict()
 
     def add_stage(self, stage: ImageFilter):
         index = len(self._stages)

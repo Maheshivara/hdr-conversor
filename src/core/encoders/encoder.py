@@ -9,7 +9,7 @@ class Encoder(ABC):
         self,
     ) -> None:
         super().__init__()
-        self._inputs: dict[str, Input] = {}
+        self._inputs: dict[str, Input] = dict()
 
     @abstractmethod
     def encode(self, image: Image) -> Image:
