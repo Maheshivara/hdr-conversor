@@ -39,10 +39,15 @@ class ImageListManager:
         return True
 
     def remove_image_path(self, idx: int) -> bool:
+        size = len(self._selected_images_paths)
         path = self._selected_images_paths.pop(idx, None)
         if path is None:
             return False
-
+        if size - 1 > idx:
+            for i in range(idx + 1, size):
+                old = self._selected_images_paths.pop(i, None)
+                if old is not None:
+                    self._selected_images_paths[i - 1] = old
         return True
 
     def get_paths(self) -> dict[int, str]:

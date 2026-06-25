@@ -34,6 +34,7 @@ class ImageList(QWidget):
 
     def _build(self):
         self._layout = QGridLayout()
+
         self._label = QLabel()
         self._label.setText(self._view_model.t("ui.home.path_list.label"))
         self._list_widget = QListWidget(self)
@@ -52,9 +53,9 @@ class ImageList(QWidget):
         self._add_images_dir_btn.clicked.connect(self._add_dir_clicked)
 
         self._layout.addWidget(self._label, 0, 0, 1, 2)
-        self._layout.addWidget(self._list_widget, 1, 0, 3, 2)
-        self._layout.addWidget(self._add_images_btn, 4, 0, 1, 1)
-        self._layout.addWidget(self._add_images_dir_btn, 4, 1, 1, 1)
+        self._layout.addWidget(self._list_widget, 1, 0, 9, 2)
+        self._layout.addWidget(self._add_images_btn, 10, 0, 1, 1)
+        self._layout.addWidget(self._add_images_dir_btn, 10, 1, 1, 1)
         self.setLayout(self._layout)
 
     def _build_list_items(self):

@@ -30,6 +30,13 @@
           "SATURATION": "Saturation",
           "GAMMA": "Gamma",
           "BLACK_LEVEL": "Black Level"
+        },
+        "add": "Add Effect"
+      },
+      "encoders": {
+        "label": "Encoders",
+        "names": {
+          "default": "Default"
         }
       }
     }

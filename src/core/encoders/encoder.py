@@ -14,3 +14,6 @@ class Encoder(ABC):
     @abstractmethod
     def encode(self, image: Image) -> Image:
         pass
+
+    def get_inputs(self) -> dict[str, Input]:
+        return self._inputs

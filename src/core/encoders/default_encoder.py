@@ -1,18 +1,17 @@
 import numpy as np
 
-from core.filters.image_filter import ImageFilter
-from core.models.enum.effects import EffectType
+from core.encoders.encoder import Encoder
 from core.models.image import Image, ImageOriginalExtension
 from core.models.input import FloatInput, Input
 
 
-class DefaultFilter(ImageFilter):
-    def __init__(self, type: EffectType) -> None:
-        super().__init__(type)
+class DefaultEncoder(Encoder):
+    def __init__(self) -> None:
+        super().__init__()
         self._inputs: dict[str, Input] = {"input": FloatInput("Input")}
 
-    def apply(self, image: Image) -> Image:
-        print(f"Applied {self._type.name}")
+    def encode(self, image: Image) -> Image:
+        print("Encoded using Default")
         image_data = np.zeros([100, 100, 3], dtype=np.uint8)
         image = Image(ImageOriginalExtension.EXR, data=image_data, file_path="here")
         return image
