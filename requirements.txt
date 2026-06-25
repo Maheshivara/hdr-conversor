@@ -93,6 +93,7 @@ packaging==26.0 \
     # via
     #   pyinstaller
     #   pyinstaller-hooks-contrib
+    #   qtpy
 pefile==2024.8.26 ; sys_platform == 'win32' \
     --hash=sha256:3ff6c5d8b43e8c37bb6e6dd5085658d658a7a0bdcd20b6a07b1fcfc1c4e9d632 \
     --hash=sha256:76f8b485dcd3b1bb8166f1128d395fa3d87af26360c2358fb75b80019b957c6f
@@ -238,6 +239,14 @@ pyyaml==6.0.3 \
     --hash=sha256:ee2922902c45ae8ccada2c5b501ab86c36525b883eff4255313a253a3160861c \
     --hash=sha256:f7057c9a337546edc7973c0d3ba84ddcdf0daa14533c2065749c9075001090e6
     # via pre-commit
+qtawesome==1.4.2 \
+    --hash=sha256:b2bf9351beb335095006892796f072ffd9755a2d7e5113dc71918dcd9ba4ef4a \
+    --hash=sha256:dbf08524428fa2df73918ce362153254cd44f089380576d84bfaad8f40eece45
+    # via hdr-converter
+qtpy==2.4.3 \
+    --hash=sha256:72095afe13673e017946cc258b8d5da43314197b741ed2890e563cf384b51aa1 \
+    --hash=sha256:db744f7832e6d3da90568ba6ccbca3ee2b3b4a890c3d6fbbc63142f6e4cdf5bb
+    # via qtawesome
 ruff==0.15.18 \
     --hash=sha256:01a754cd6a1b630d3f97e33eb452cf7a98040482318e870f8bc52a5a30e62657 \
     --hash=sha256:02299e6e9fa5b297a3f6d5d10d7bcd655c925b028bb8b9d4588214549c6b9ec4 \

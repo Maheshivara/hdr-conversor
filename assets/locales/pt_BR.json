@@ -1,6 +1,7 @@
 {
   "themes": {
-    "default": "Padrão"
+    "default": "Padrão",
+    "amethyst": "Ametista"
   },
   "languages": {
     "en_US": "Inglês (EUA)",

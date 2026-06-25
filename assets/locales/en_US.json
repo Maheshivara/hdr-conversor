@@ -1,6 +1,7 @@
 {
   "themes": {
-    "default": "Default"
+    "default": "Default",
+    "amethyst": "Amethyst"
   },
   "languages": {
     "en_US": "English (US)",
@@ -11,6 +12,26 @@
       "theme": "Theme",
       "settings": "Settings",
       "language": "Language"
+    },
+    "home": {
+      "path_list": {
+        "label": "Images to Convert",
+        "add_images_dialog": "Please select the images to add",
+        "add_image_dir_dialog": "Please select the directory of images",
+        "image_files": "Image Files",
+        "images_dir": "Directory",
+        "add_images": "Add Images",
+        "add_dir": "Add Directory"
+      },
+      "effect_list": {
+        "label": "Effects to Run",
+        "effect": {
+          "EXPOSURE": "Exposure",
+          "SATURATION": "Saturation",
+          "GAMMA": "Gamma",
+          "BLACK_LEVEL": "Black Level"
+        }
+      }
     }
   }
 }

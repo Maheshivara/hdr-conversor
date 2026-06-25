@@ -20,8 +20,8 @@ class Input(ABC):
         self,
         label: str,
         type: InputType,
-        display_name: Optional[str],
-        default: Optional[Any],
+        display_name: Optional[str] = None,
+        default: Optional[Any] = None,
     ) -> None:
         super().__init__()
         self.label = label
@@ -68,9 +68,9 @@ class IntegerInput(Input):
     def __init__(
         self,
         label: str,
-        default: Optional[int],
-        display_name: Optional[str],
-        checker: Optional[Callable[[int], bool]],
+        default: Optional[int] = None,
+        display_name: Optional[str] = None,
+        checker: Optional[Callable[[int], bool]] = None,
     ) -> None:
         super().__init__(label, InputType.INTEGER, display_name, default)
         self._checker = checker
@@ -100,9 +100,9 @@ class TextInput(Input):
     def __init__(
         self,
         label: str,
-        default: Optional[str],
-        display_name: Optional[str],
-        checker: Optional[Callable[[str], bool]],
+        default: Optional[str] = None,
+        display_name: Optional[str] = None,
+        checker: Optional[Callable[[str], bool]] = None,
     ) -> None:
         super().__init__(label, InputType.TEXT, display_name, default)
         self._checker = checker
@@ -132,9 +132,9 @@ class CheckboxInput(Input):
     def __init__(
         self,
         label: str,
-        default: Optional[bool],
-        display_name: Optional[str],
-        checker: Optional[Callable[[bool], bool]],
+        default: Optional[bool] = None,
+        display_name: Optional[str] = None,
+        checker: Optional[Callable[[bool], bool]] = None,
     ) -> None:
         super().__init__(label, InputType.CHECKBOX, display_name, default)
         self._checker = checker
@@ -165,9 +165,9 @@ class FloatInput(Input):
     def __init__(
         self,
         label: str,
-        default: Optional[float],
-        display_name: Optional[str],
-        checker: Optional[Callable[[float], bool]],
+        default: Optional[float] = None,
+        display_name: Optional[str] = None,
+        checker: Optional[Callable[[float], bool]] = None,
     ) -> None:
         super().__init__(label, InputType.FLOAT, display_name, default)
         self._checker = checker
@@ -206,9 +206,9 @@ class ColorInput(Input):
     def __init__(
         self,
         label: str,
-        default: Optional[Any],
-        display_name: Optional[str],
-        checker: Optional[Callable[[Any], bool]],
+        default: Optional[Any] = None,
+        display_name: Optional[str] = None,
+        checker: Optional[Callable[[Any], bool]] = None,
     ) -> None:
         super().__init__(label, InputType.COLOR, display_name, default)
         self._checker = checker
@@ -273,9 +273,9 @@ class FilePathInput(Input):
     def __init__(
         self,
         label: str,
-        default: Optional[Any],
-        display_name: Optional[str],
-        checker: Optional[Callable[[Path], bool]],
+        default: Optional[Any] = None,
+        display_name: Optional[str] = None,
+        checker: Optional[Callable[[Path], bool]] = None,
     ) -> None:
         super().__init__(label, InputType.FILE_PATH, display_name, default)
         self._checker = checker

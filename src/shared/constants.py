@@ -27,3 +27,15 @@ class DefaultPath:
     FONTS_DIR = Path(path.join(ASSETS_DIR, "fonts"))
     PALETTES_DIR = Path(path.join(ASSETS_DIR, "palettes"))
     LOCALES_DIR = Path(path.join(ASSETS_DIR, "locales"))
+
+
+@dataclass(frozen=True)
+class ImageConfig:
+    VALID_EXTENSIONS = [".exr", ".hdr"]
+
+    def is_valid_path(self, p: str) -> bool:
+        if path.exists(p) and path.isfile(p):
+            for ext in self.VALID_EXTENSIONS:
+                if p.endswith(ext):
+                    return True
+        return False
