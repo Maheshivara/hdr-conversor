@@ -12,6 +12,33 @@
       "theme": "Tema",
       "settings": "Configurações",
       "language": "Lingua"
+    },
+    "home": {
+      "path_list": {
+        "label": "Imagens para Converter",
+        "add_images_dialog": "Por favor, selecione as imagens para adicionar",
+        "add_image_dir_dialog": "Por favor, selecione o diretório de imagens",
+        "image_files": "Arquivos de Imagem",
+        "images_dir": "Diretório",
+        "add_images": "Adicionar Imagens",
+        "add_dir": "Adicionar Diretório"
+      },
+      "effect_list": {
+        "label": "Efeitos para Aplicar",
+        "effect": {
+          "EXPOSURE": "Exposição",
+          "SATURATION": "Saturação",
+          "GAMMA": "Gama",
+          "BLACK_LEVEL": "Nível de Preto"
+        },
+        "add": "Adicionar Efeito"
+      },
+      "encoders": {
+        "label": "Codificadores",
+        "names": {
+          "default": "Padrão"
+        }
+      }
     }
   }
 }

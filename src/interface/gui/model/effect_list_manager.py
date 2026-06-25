@@ -4,10 +4,18 @@ from core.filters.default_filter import DefaultFilter
 from core.filters.image_filter import ImageFilter
 from core.models.enum.effects import EffectType
 from core.models.input import Input
+from core.pipelines.image_pipeline import ImagePipeline
 
 
 class EffectListManager:
     _filters: dict[int, ImageFilter] = dict()
+
+    def __init__(self) -> None:
+        self._availables: set[EffectType] = set()
+        self._availables.add(EffectType.BLACK_LEVEL)
+        self._availables.add(EffectType.EXPOSURE)
+        self._availables.add(EffectType.GAMMA)
+        self._availables.add(EffectType.SATURATION)
 
     def add_effect(self, type: EffectType) -> bool:
         idx = len(self._filters)
@@ -24,18 +32,18 @@ class EffectListManager:
         return idx < len(self._filters)
 
     def get_available(self) -> set[EffectType]:
-        s: set[EffectType] = set()
-        s.add(EffectType.BLACK_LEVEL)
-        s.add(EffectType.EXPOSURE)
-        s.add(EffectType.GAMMA)
-        s.add(EffectType.SATURATION)
-        return s
+        return self._availables
 
     def remove_effect(self, idx: int) -> bool:
+        size = len(self._filters)
         effect = self._filters.pop(idx, None)
         if effect is None:
             return False
-
+        if size - 1 > idx:
+            for i in range(idx + 1, size):
+                old = self._filters.pop(i, None)
+                if old is not None:
+                    self._filters[i - 1] = old
         return True
 
     def get_effect_params(self, idx: int) -> dict[str, Input]:
@@ -60,7 +68,16 @@ class EffectListManager:
         return res
 
     def current_effects(self) -> dict[int, ImageFilter]:
-        return self._filters
+        return dict(sorted(self._filters.items()))
 
     def clear(self):
         self._filters.clear()
+
+    def get_pipeline(self) -> ImagePipeline:
+        pipe = ImagePipeline()
+        effects = self.current_effects()
+
+        for _, effect in effects.items():
+            pipe.add_stage(effect)
+
+        return pipe
