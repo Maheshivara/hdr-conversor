@@ -3,26 +3,19 @@ from typing import Optional
 from PySide6.QtCore import QObject, Signal
 
 from interface.gui.model.image_list import ImageListModel
-from interface.gui.viewmodel.home_screen import HomeScreenViewModel
 
 
 class ImageListViewModel(QObject):
-    changed_theme = Signal()
-    changed_language = Signal()
     list_updated = Signal()
 
     def __init__(
         self,
-        home_view_model: HomeScreenViewModel,
         list_model: ImageListModel,
         parent: Optional[QObject] = None,
     ) -> None:
         super().__init__(parent)
         self._model = list_model
-        self._home_view_model = home_view_model
 
-        self._home_view_model.changed_language.connect(self.changed_language)
-        self._home_view_model.changed_theme.connect(self.changed_theme)
         self._model.list_updated.connect(self.list_updated)
 
     def get_list(self) -> dict[int, str]:
@@ -39,6 +32,3 @@ class ImageListViewModel(QObject):
 
     def clear_list(self):
         self._model.clear()
-
-    def t(self, key: str) -> str:
-        return self._home_view_model.t(key)

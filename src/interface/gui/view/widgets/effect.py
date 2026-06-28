@@ -17,8 +17,9 @@ from qtpy.QtWidgets import (
     QWidget,
 )
 
-from core.filters.image_filter import ImageFilter
-from core.models.input import FloatInput, IntegerInput
+from application.dto.effects import EffectDTO
+from interface.gui.viewmodel.home_screen import HomeScreenViewModel
+from shared.constants import AvailableInput
 
 
 class Effect(QWidget):
@@ -26,12 +27,15 @@ class Effect(QWidget):
         self,
         name: str,
         idx: int,
-        effect: ImageFilter,
+        effect: EffectDTO,
+        home_view_model: HomeScreenViewModel,
         on_param_update: Callable[[int, str, Any], None],
         on_remove_effect: Callable[[int], None],
     ):
         super().__init__()
+        self._home_view = home_view_model
         self._name = name
+        self._type = effect.type
         self._idx = idx
         self._effect = effect
         self._on_param_update = on_param_update
@@ -59,30 +63,37 @@ class Effect(QWidget):
 
     def _build_params(self):
         self._params_widget.clear()
-        for key, param in self._effect.get_params().items():
-            if isinstance(param, FloatInput):
-                self._build_float(key, param)
-                continue
-            if isinstance(param, IntegerInput):
-                self._build_int(key, param)
+        for key, param in self._effect.inputs.items():
+            type = param[0]
+            value = param[1]
+            match type:
+                case AvailableInput.INT:
+                    self._build_int(key, value)
+                case AvailableInput.FLOAT:
+                    self._build_float(key, value)
+
         self._params_widget.setSizeAdjustPolicy(
             QAbstractScrollArea.SizeAdjustPolicy.AdjustToContents
         )
 
-    def _build_float(self, key: str, param: FloatInput):
+    def _build_float(self, key: str, value: float | None):
         item = QListWidgetItem()
         item_widget = QWidget()
 
-        text = QLabel(param.get_display_name())
+        text = QLabel(
+            self._home_view.t(
+                f"ui.home.effect_list.effect.{self._type.name}.inputs.{key}"
+            )
+        )
 
         spin_box = QDoubleSpinBox()
-        value = param.get_value()
-        if value is None:
-            value = 0
+        v = value
+        if v is None:
+            v = 0
 
         spin_box.setMaximum(1000)
         spin_box.setMinimum(-1000)
-        spin_box.setValue(value)
+        spin_box.setValue(v)
         spin_box.valueChanged.connect(
             lambda nv, k=key, i=self._idx: self._on_param_update(i, k, nv)
         )
@@ -95,20 +106,24 @@ class Effect(QWidget):
         self._params_widget.addItem(item)
         self._params_widget.setItemWidget(item, item_widget)
 
-    def _build_int(self, key: str, param: IntegerInput):
+    def _build_int(self, key: str, value: int | None):
         item = QListWidgetItem()
         item_widget = QWidget()
 
-        text = QLabel(param.get_display_name())
+        text = QLabel(
+            self._home_view.t(
+                f"ui.home.effect_list.effect.{self._type.name}.inputs.{key}"
+            )
+        )
 
         spin_box = QSpinBox()
-        value = param.get_value()
-        if value is None:
-            value = 0
+        v = value
+        if v is None:
+            v = 0
 
         spin_box.setMaximum(1000)
         spin_box.setMinimum(-1000)
-        spin_box.setValue(value)
+        spin_box.setValue(v)
         spin_box.valueChanged.connect(
             lambda nv, k=key, i=self._idx: self._on_param_update(i, k, nv)
         )

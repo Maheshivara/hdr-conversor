@@ -5,7 +5,8 @@ description = "A simple Python tool that converts HDR images (.hdr and .exr) to 
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
-    "opencv-python>=4.13.0.92",
+    "opencv-python-headless>=4.13.0.92",
+    "openexr-numpy>=0.0.8",
     "pillow>=12.1.1",
     "pyside6>=6.10.2",
     "qtawesome>=1.4.2",
