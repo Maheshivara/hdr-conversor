@@ -4,8 +4,10 @@ from application.dto.effects import EffectDTO
 from application.dto.encoder import EncoderDTO
 from application.errors.pipeline import PipelineError
 from core.encoders.default_encoder import DefaultEncoder
-from core.filters.default_filter import DefaultFilter
-from core.models.enum.effects import EffectType
+from core.filters.blacklevel_filter import BlackLevelFilter
+from core.filters.exposure_filter import ExposureFilter
+from core.filters.gamma_filter import GammaFilter
+from core.filters.saturation_filter import SaturationFilter
 from core.models.image import Image
 from core.pipelines.image_pipeline import ImagePipeline
 from infra.image_io.reader import ImageReader
@@ -54,13 +56,13 @@ class PipelineUseCase:
         f = None
         match t:
             case AvailableEffect.BLACK_LEVEL:
-                f = DefaultFilter(EffectType.BLACK_LEVEL)
+                f = BlackLevelFilter()
             case AvailableEffect.SATURATION:
-                f = DefaultFilter(EffectType.SATURATION)
+                f = SaturationFilter()
             case AvailableEffect.GAMMA:
-                f = DefaultFilter(EffectType.GAMMA)
+                f = GammaFilter()
             case AvailableEffect.EXPOSURE:
-                f = DefaultFilter(EffectType.EXPOSURE)
+                f = ExposureFilter()
 
         if f is None:
             return PipelineError.EFFECT_NOT_FOUND_ERROR
