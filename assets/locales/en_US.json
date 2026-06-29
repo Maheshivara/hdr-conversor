@@ -26,17 +26,31 @@
       "effect_list": {
         "label": "Effects to Run",
         "effect": {
-          "EXPOSURE": "Exposure",
-          "SATURATION": "Saturation",
-          "GAMMA": "Gamma",
-          "BLACK_LEVEL": "Black Level"
+          "EXPOSURE": {
+            "name": "Exposure",
+            "inputs": {
+              "input": "Input"
+            }
+          },
+          "SATURATION": { "name": "Saturation", "inputs": {} },
+          "GAMMA": { "name": "Gamma", "inputs": {} },
+          "BLACK_LEVEL": { "name": "Black Level", "inputs": {} }
         },
         "add": "Add Effect"
       },
       "encoders": {
         "label": "Encoders",
-        "names": {
-          "default": "Default"
+        "RGBM": {
+          "name": "RGBM",
+          "inputs": {}
+        },
+        "RGBE": {
+          "name": "RGBE",
+          "inputs": {}
+        },
+        "LOG_LUV": {
+          "name": "LogLuv",
+          "inputs": {}
         }
       }
     }

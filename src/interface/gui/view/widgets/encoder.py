@@ -8,21 +8,29 @@ from PySide6.QtWidgets import (
     QListWidgetItem,
     QMenu,
     QPushButton,
+    QSpinBox,
     QVBoxLayout,
     QWidget,
 )
 
-from core.models.input import FloatInput
 from interface.gui.viewmodel.encoder import EncoderViewModel
+from interface.gui.viewmodel.home_screen import HomeScreenViewModel
+from shared.constants import AvailableInput
 
 
 class Encoder(QWidget):
-    def __init__(self, view_model: EncoderViewModel):
+    def __init__(
+        self, home_view_model: HomeScreenViewModel, view_model: EncoderViewModel
+    ):
         super().__init__()
         self._view_model = view_model
+        self._home_view = home_view_model
 
-        self._view_model.changed_language.connect(self._retranslate)
-        self._view_model.changed_theme.connect(self._retranslate)
+        self._home_view.changed_language.connect(self._retranslate)
+        self._home_view.changed_theme.connect(self._retranslate)
+
+        self._view_model.updated_encoder.connect(self._build_encoder_control)
+        self._view_model.updated_encoder.connect(self._build_encoders_menu)
 
         self._build()
 
@@ -30,7 +38,7 @@ class Encoder(QWidget):
         self._layout = QVBoxLayout()
         self._encoders_btn = QPushButton()
         self._encoders_btn.setIcon(qta.icon("fa6s.code-compare"))
-        self._encoders_btn.setText(self._view_model.t("ui.home.encoders.label"))
+        self._encoders_btn.setText(self._home_view.t("ui.home.encoders.label"))
 
         self._encoders_menu = QMenu()
         self._encoders_menu_group = QActionGroup(self)
@@ -56,14 +64,16 @@ class Encoder(QWidget):
 
     def _build_encoders_menu(self):
         self._encoders_menu.clear()
-        self._current = self._view_model.get_current()
+        current = self._view_model.get_current()
+        if current is None:
+            return
         available = self._view_model.get_available()
 
         for encoder in available:
-            name = self._view_model.t(f"ui.home.encoders.names.{encoder}")
+            name = self._home_view.t(f"ui.home.encoders.{encoder.name}.name")
             action = self._encoders_menu_group.addAction(name)
             action.setCheckable(True)
-            if encoder == self._current[0]:
+            if encoder == current.type:
                 action.setChecked(True)
             action.triggered.connect(
                 lambda _, e=encoder: self._view_model.set_current(e)
@@ -74,9 +84,12 @@ class Encoder(QWidget):
         self._encoder_control_inputs.clear()
 
         current = self._view_model.get_current()
-        name = self._view_model.t(f"ui.home.encoders.names.{current[0]}")
+        if current is None:
+            return
+
+        name = self._home_view.t(f"ui.home.encoders.{current.type.name}.name")
         self._encoder_control_label.setText(name)
-        inputs = current[1].get_inputs()
+        inputs = current.inputs
 
         show = len(inputs) > 0
         self._encoder_control_inputs.setVisible(show)
@@ -84,26 +97,62 @@ class Encoder(QWidget):
 
         for key, input in inputs.items():
             item = QListWidgetItem()
-            if isinstance(input, FloatInput):
-                input_widget = self._build_float(key, input)
-                item.setSizeHint(input_widget.sizeHint())
-                self._encoder_control_inputs.addItem(item)
-                self._encoder_control_inputs.setItemWidget(item, input_widget)
+            type = input[0]
+            value = input[1]
+            match type:
+                case AvailableInput.FLOAT:
+                    input_widget = self._build_float(current.type.name, key, value)
+                    item.setSizeHint(input_widget.sizeHint())
+                    self._encoder_control_inputs.addItem(item)
+                    self._encoder_control_inputs.setItemWidget(item, input_widget)
 
-    def _build_float(self, name: str, i: FloatInput) -> QWidget:
+                case AvailableInput.INT:
+                    input_widget = self._build_int(current.type.name, key, value)
+                    item.setSizeHint(input_widget.sizeHint())
+                    self._encoder_control_inputs.addItem(item)
+                    self._encoder_control_inputs.setItemWidget(item, input_widget)
+
+    def _build_float(self, effect_name: str, name: str, value: float | None) -> QWidget:
         label = QLabel()
-        label.setText(i.get_display_name())
+        label.setText(self._home_view.t(f"ui.home.encoders.{effect_name}.{name}"))
 
         input = QDoubleSpinBox()
         input.setMaximum(1000)
         input.setMinimum(-1000)
-        value = i.get_value()
-        if value is None:
-            value = 0
-        input.setValue(value)
+
+        v = value
+        if v is None:
+            v = 0
+
+        input.setValue(v)
         input.valueChanged.connect(
             lambda nv, key=name: self._view_model.update_param(key, nv)
         )
+
+        widget = QWidget()
+        layout = QHBoxLayout()
+        layout.addWidget(label)
+        layout.addWidget(input)
+        widget.setLayout(layout)
+        return widget
+
+    def _build_int(self, effect_name: str, name: str, value: int | None) -> QWidget:
+        label = QLabel()
+        label.setText(self._home_view.t(f"ui.home.encoders.{effect_name}.{name}"))
+
+        input = QSpinBox()
+        input.setMaximum(1000)
+        input.setMinimum(-1000)
+        v = value
+
+        if v is None:
+            v = 0
+
+        input.setValue(v)
+        input.valueChanged.connect(
+            lambda nv, key=name: self._view_model.update_param(key, nv)
+        )
+
         widget = QWidget()
         layout = QHBoxLayout()
         layout.addWidget(label)
@@ -112,6 +161,6 @@ class Encoder(QWidget):
         return widget
 
     def _retranslate(self):
-        self._encoders_btn.setText(self._view_model.t("ui.home.encoders.label"))
+        self._encoders_btn.setText(self._home_view.t("ui.home.encoders.label"))
         self._build_encoders_menu()
         self._build_encoder_control()

@@ -16,19 +16,28 @@ class ImagePipeline:
     def get_all_stages(self) -> dict[int, ImageFilter]:
         return self._stages
 
-    def remove_stage(self, idx: int):
+    def remove_stage(self, idx: int) -> bool:
         stage = self._stages.get(idx)
+        size = len(self._stages)
         if stage is None:
-            return
+            return False
 
         self._stages.pop(idx)
 
-    def move_stage(self, init_idx: int, target_idx: int):
+        if size - 1 > idx:
+            for i in range(idx + 1, size):
+                old = self._stages.pop(i, None)
+                if old is not None:
+                    self._stages[i - 1] = old
+
+        return True
+
+    def move_stage(self, init_idx: int, target_idx: int) -> bool:
         if init_idx == target_idx:
-            return
+            return False
 
         if init_idx not in self._stages:
-            return
+            return False
 
         ordered_keys = sorted(self._stages.keys())
         stages = [self._stages[k] for k in ordered_keys]
@@ -36,7 +45,7 @@ class ImagePipeline:
         try:
             source_pos = ordered_keys.index(init_idx)
         except ValueError:
-            return
+            return False
 
         n = len(stages)
         if target_idx in ordered_keys:
@@ -60,14 +69,18 @@ class ImagePipeline:
         for i, s in enumerate(stages):
             self._stages[i] = s
 
-    def swap_stages(self, idx_1: int, idx_2: int):
+        return True
+
+    def swap_stages(self, idx_1: int, idx_2: int) -> bool:
         stage_one = self._stages.get(idx_1)
         stage_two = self._stages.get(idx_2)
 
         if stage_one is None or stage_two is None:
-            return
+            return False
         self._stages[idx_1] = stage_two
         self._stages[idx_2] = stage_one
+
+        return True
 
     def run(self, image: Image) -> Image:
         ordered_index = sorted(self._stages.keys())

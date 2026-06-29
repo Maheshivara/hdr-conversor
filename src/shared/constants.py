@@ -1,5 +1,6 @@
 import sys
 from dataclasses import dataclass
+from enum import Enum, auto
 from os import path
 from pathlib import Path
 
@@ -39,3 +40,28 @@ class ImageConfig:
                 if p.endswith(ext):
                     return True
         return False
+
+
+class AvailableEffect(Enum):
+    GAMMA = auto()
+    EXPOSURE = auto()
+    SATURATION = auto()
+    BLACK_LEVEL = auto()
+
+
+class AvailableInput(Enum):
+    INT = auto()
+    FLOAT = auto()
+    TEXT = auto()
+    COLOR = auto()
+
+
+class AvailableEncoders(Enum):
+    RGBM = auto()
+    RGBE = auto()
+    LOG_LUV = auto()
+
+
+class AvailableOutputFormat(Enum):
+    PNG = auto()
+    DDS = auto()

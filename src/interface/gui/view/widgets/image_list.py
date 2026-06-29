@@ -12,19 +12,24 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
+from interface.gui.viewmodel.home_screen import HomeScreenViewModel
 from interface.gui.viewmodel.image_list import ImageListViewModel
 from shared.constants import ImageConfig
 
 
 class ImageList(QWidget):
     def __init__(
-        self, view_model: ImageListViewModel, parent: Optional[QWidget] = None
+        self,
+        home_view_model: HomeScreenViewModel,
+        view_model: ImageListViewModel,
+        parent: Optional[QWidget] = None,
     ):
         super().__init__(parent)
         self._view_model = view_model
+        self._home_view = home_view_model
 
-        self._view_model.changed_language.connect(self._retranslate)
-        self._view_model.changed_theme.connect(self._retranslate)
+        self._home_view.changed_language.connect(self._retranslate)
+        self._home_view.changed_theme.connect(self._retranslate)
         self._view_model.list_updated.connect(self._build_list_items)
         allowed_files: list[str] = []
         for ext in ImageConfig.VALID_EXTENSIONS:
@@ -36,19 +41,17 @@ class ImageList(QWidget):
         self._layout = QGridLayout()
 
         self._label = QLabel()
-        self._label.setText(self._view_model.t("ui.home.path_list.label"))
+        self._label.setText(self._home_view.t("ui.home.path_list.label"))
         self._list_widget = QListWidget(self)
         self._build_list_items()
 
         self._add_images_btn = QPushButton()
-        self._add_images_btn.setText(self._view_model.t("ui.home.path_list.add_images"))
+        self._add_images_btn.setText(self._home_view.t("ui.home.path_list.add_images"))
         self._add_images_btn.setIcon(qta.icon("fa6.images"))
         self._add_images_btn.clicked.connect(self._add_images_clicked)
 
         self._add_images_dir_btn = QPushButton()
-        self._add_images_dir_btn.setText(
-            self._view_model.t("ui.home.path_list.add_dir")
-        )
+        self._add_images_dir_btn.setText(self._home_view.t("ui.home.path_list.add_dir"))
         self._add_images_dir_btn.setIcon(qta.icon("fa6.folder-closed"))
         self._add_images_dir_btn.clicked.connect(self._add_dir_clicked)
 
@@ -90,10 +93,10 @@ class ImageList(QWidget):
 
     def _add_images_clicked(self):
         dialog = QFileDialog(self)
-        dialog.setWindowTitle(self._view_model.t("ui.home.path_list.add_image_dialog"))
+        dialog.setWindowTitle(self._home_view.t("ui.home.path_list.add_image_dialog"))
         dialog.setFileMode(QFileDialog.FileMode.ExistingFiles)
         dialog.setNameFilter(
-            f"{self._view_model.t('ui.home.path_list.image_files')} {self._file_selector}"
+            f"{self._home_view.t('ui.home.path_list.image_files')} {self._file_selector}"
         )
         if dialog.exec():
             selected_files = dialog.selectedFiles()
@@ -101,16 +104,14 @@ class ImageList(QWidget):
 
     def _add_dir_clicked(self):
         dialog = QFileDialog(self)
-        dialog.setWindowTitle(self._view_model.t("ui.home.path_list.add_dir_dialog"))
+        dialog.setWindowTitle(self._home_view.t("ui.home.path_list.add_dir_dialog"))
         dialog.setFileMode(QFileDialog.FileMode.Directory)
-        dialog.setNameFilter(f"{self._view_model.t('ui.home.path_list.image_dir')}")
+        dialog.setNameFilter(f"{self._home_view.t('ui.home.path_list.image_dir')}")
         directory = dialog.getExistingDirectory()
         if directory:
             self._view_model.add_dir(directory)
 
     def _retranslate(self):
-        self._label.setText(self._view_model.t("ui.home.path_list.label"))
-        self._add_images_dir_btn.setText(
-            self._view_model.t("ui.home.path_list.add_dir")
-        )
-        self._add_images_btn.setText(self._view_model.t("ui.home.path_list.add_images"))
+        self._label.setText(self._home_view.t("ui.home.path_list.label"))
+        self._add_images_dir_btn.setText(self._home_view.t("ui.home.path_list.add_dir"))
+        self._add_images_btn.setText(self._home_view.t("ui.home.path_list.add_images"))
