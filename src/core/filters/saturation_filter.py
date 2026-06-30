@@ -16,8 +16,10 @@ class SaturationFilter(ImageFilter):
         saturation = self._inputs["saturation"].get_value()
 
         lum = (
-            image[:, :, 0] * 0.2126 + image[:, :, 1] * 0.7152 + image[:, :, 2] * 0.0722
+            image.data[:, :, 0] * 0.2126
+            + image.data[:, :, 1] * 0.7152
+            + image.data[:, :, 2] * 0.0722
         )
-        image = (1.0 - saturation) * lum[..., np.newaxis] + saturation * image
+        image.data = (1.0 - saturation) * lum[..., np.newaxis] + saturation * image.data
 
         return image

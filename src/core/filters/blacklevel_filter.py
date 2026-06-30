@@ -8,7 +8,7 @@ from core.models.input import FloatInput
 
 class BlackLevelFilter(ImageFilter):
     def __init__(self):
-        super().__init__(EffectType.BLACKLEVEL)
+        super().__init__(EffectType.BLACK_LEVEL)
 
         self._inputs = {"black_level": FloatInput("Black Level", 0.0)}
 

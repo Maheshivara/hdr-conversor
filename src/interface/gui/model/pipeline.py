@@ -11,12 +11,13 @@ class PipelineModel(QObject):
 
     effects_updated = Signal()
     encoder_updated = Signal()
+    fmt_updated = Signal()
 
     effect_update_error = Signal(str)
     encoder_update_error = Signal(str)
 
     pipeline_started = Signal()
-    pipeline_processing = Signal(tuple[int, int])
+    pipeline_processing = Signal(tuple)
     pipeline_error = Signal(str)
     pipeline_success = Signal()
 
@@ -76,15 +77,23 @@ class PipelineModel(QObject):
     def get_available_effects(self):
         return self._pipeline.get_available_effects()
 
-    def execute(
-        self, image_paths: list[str], formats: list[AvailableOutputFormat], out_dir: str
-    ):
+    def execute(self, image_paths: list[str], out_dir: str):
         self.pipeline_started.emit()
         total = len(image_paths)
         for i, path in enumerate(image_paths):
-            self.pipeline_processing.emit((i, total))
-            err = self._pipeline.execute(path, formats, out_dir)
+            status: tuple[int, int] = (i, total)
+            self.pipeline_processing.emit(status)
+            err = self._pipeline.execute(path, out_dir)
             if err is not None:
                 self.pipeline_error.emit(err.name)
-
         self.pipeline_success.emit()
+
+    def toggle_fmt(self, fmt: AvailableOutputFormat):
+        self._pipeline.toggle_fmt(fmt)
+        self.fmt_updated.emit()
+
+    def get_available_fmt(self):
+        return self._pipeline.get_available_fmt()
+
+    def get_fmt(self):
+        return self._pipeline.get_output_fmt()

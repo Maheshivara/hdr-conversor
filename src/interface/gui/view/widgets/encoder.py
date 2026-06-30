@@ -112,9 +112,13 @@ class Encoder(QWidget):
                     self._encoder_control_inputs.addItem(item)
                     self._encoder_control_inputs.setItemWidget(item, input_widget)
 
-    def _build_float(self, effect_name: str, name: str, value: float | None) -> QWidget:
+    def _build_float(
+        self, encoder_name: str, name: str, value: float | None
+    ) -> QWidget:
         label = QLabel()
-        label.setText(self._home_view.t(f"ui.home.encoders.{effect_name}.{name}"))
+        label.setText(
+            self._home_view.t(f"ui.home.encoders.{encoder_name}.inputs.{name}")
+        )
 
         input = QDoubleSpinBox()
         input.setMaximum(1000)
@@ -136,9 +140,9 @@ class Encoder(QWidget):
         widget.setLayout(layout)
         return widget
 
-    def _build_int(self, effect_name: str, name: str, value: int | None) -> QWidget:
+    def _build_int(self, encoder_name: str, name: str, value: int | None) -> QWidget:
         label = QLabel()
-        label.setText(self._home_view.t(f"ui.home.encoders.{effect_name}.{name}"))
+        label.setText(self._home_view.t(f"ui.home.encoders.{encoder_name}.{name}"))
 
         input = QSpinBox()
         input.setMaximum(1000)

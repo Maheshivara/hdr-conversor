@@ -11,7 +11,7 @@ class GammaFilter(ImageFilter):
         self._inputs = {"gamma": FloatInput("Gamma", 2.2)}
 
     def apply(self, image: Image) -> Image:
-        gamma = self._inputs["gamma"].get_value()
+        gamma = float(self._inputs["gamma"].get_value())
 
         image.data = image.data**gamma
 

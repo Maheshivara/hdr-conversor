@@ -1,44 +1,95 @@
 {
-  "themes": {
-    "default": "Padrão",
-    "amethyst": "Ametista"
-  },
   "languages": {
-    "en_US": "Inglês (EUA)",
-    "pt_BR": "Português (BR)"
+    "en_US": "Ingl\u00eas (EUA)",
+    "pt_BR": "Portugu\u00eas (Brasil)"
+  },
+  "pipeline": {
+    "errors": {
+      "COULD_NOT_SWAP_ERROR": "Falha ao trocar os efeitos",
+      "EFFECT_INPUT_NOT_FOUND_ERROR": "Entrada do efeito n\u00e3o encontrada",
+      "EFFECT_NOT_FOUND_ERROR": "Efeito n\u00e3o encontrado",
+      "FAIL_TO_WRITE_ERROR": "Falha ao gravar a imagem",
+      "INVALID_EFFECT": "Efeito desconhecido",
+      "INVALID_ENCODER_ERROR": "Codificador desconhecido",
+      "INVALID_INPUT_VALUE_ERROR": "Valor de entrada inv\u00e1lido",
+      "NEED_OUTPUT_FORMAT_ERROR": "\u00c9 necess\u00e1rio pelo menos um formato de sa\u00edda para a imagem",
+      "READ_IMAGE_ERROR": "Falha ao ler a imagem",
+      "REMOVE_EFFECT_ERROR": "Falha ao remover o efeito",
+      "title": "Falha ao executar"
+    },
+    "success": "Imagens codificadas!",
+    "title": "Pipeline"
+  },
+  "themes": {
+    "amethyst": "Ametista",
+    "default": "Padr\u00e3o"
   },
   "ui": {
-    "menu": {
-      "theme": "Tema",
-      "settings": "Configurações",
-      "language": "Lingua"
-    },
     "home": {
-      "path_list": {
-        "label": "Imagens para Converter",
-        "add_images_dialog": "Por favor, selecione as imagens para adicionar",
-        "add_image_dir_dialog": "Por favor, selecione o diretório de imagens",
-        "image_files": "Arquivos de Imagem",
-        "images_dir": "Diretório",
-        "add_images": "Adicionar Imagens",
-        "add_dir": "Adicionar Diretório"
-      },
       "effect_list": {
-        "label": "Efeitos para Aplicar",
+        "add": "Adicionar Efeito",
         "effect": {
-          "EXPOSURE": "Exposição",
-          "SATURATION": "Saturação",
-          "GAMMA": "Gama",
-          "BLACK_LEVEL": "Nível de Preto"
+          "BLACK_LEVEL": {
+            "inputs": {
+              "black_level": "N\u00edvel de Preto"
+            },
+            "name": "N\u00edvel de Preto"
+          },
+          "EXPOSURE": {
+            "inputs": {
+              "exposure": "Exposi\u00e7\u00e3o"
+            },
+            "name": "Exposi\u00e7\u00e3o"
+          },
+          "GAMMA": {
+            "inputs": {
+              "gamma": "Gama"
+            },
+            "name": "Gama"
+          },
+          "SATURATION": {
+            "inputs": {
+              "saturation": "Satura\u00e7\u00e3o"
+            },
+            "name": "Satura\u00e7\u00e3o"
+          }
         },
-        "add": "Adicionar Efeito"
+        "label": "Efeitos para Executar"
       },
       "encoders": {
-        "label": "Codificadores",
-        "names": {
-          "default": "Padrão"
-        }
+        "LOG_LUV": {
+          "inputs": {},
+          "name": "LogLuv"
+        },
+        "RGBE": {
+          "inputs": {},
+          "name": "RGBE"
+        },
+        "RGBM": {
+          "inputs": {
+            "coefficient": "Coeficiente"
+          },
+          "name": "RGBM"
+        },
+        "label": "Codificadores"
+      },
+      "execute": {
+        "run": "Executar"
+      },
+      "path_list": {
+        "add_dir": "Adicionar Diret\u00f3rio",
+        "add_image_dir_dialog": "Selecione o diret\u00f3rio das imagens",
+        "add_images": "Adicionar Imagens",
+        "add_images_dialog": "Selecione as imagens para adicionar",
+        "image_files": "Arquivos de Imagem",
+        "images_dir": "Diret\u00f3rio",
+        "label": "Imagens para Converter"
       }
+    },
+    "menu": {
+      "language": "Idioma",
+      "settings": "Configura\u00e7\u00f5es",
+      "theme": "Tema"
     }
   }
 }

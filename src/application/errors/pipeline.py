@@ -11,3 +11,4 @@ class PipelineError(Enum):
     INVALID_INPUT_VALUE_ERROR = auto()
     INVALID_ENCODER_ERROR = auto()
     FAIL_TO_WRITE_ERROR = auto()
+    NEED_OUTPUT_FORMAT_ERROR = auto

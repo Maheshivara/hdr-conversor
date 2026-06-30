@@ -1,7 +1,7 @@
 from typing import Any
 
-from core.encoders.default_encoder import DefaultEncoder
 from core.encoders.encoder import Encoder
+from core.encoders.rgbm import RGBMEncoder
 from core.models.input import ColorInput, FloatInput, IntegerInput, TextInput
 from shared.constants import AvailableEncoders, AvailableInput
 
@@ -17,7 +17,7 @@ class EncoderDTO:
     def from_encoder(encoder: Encoder) -> "EncoderDTO|None":
         t = None
 
-        if isinstance(encoder, DefaultEncoder):
+        if isinstance(encoder, RGBMEncoder):
             t = AvailableEncoders.RGBM
 
         if t is None:
