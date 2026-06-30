@@ -3,7 +3,7 @@ from typing import Any
 from application.dto.effects import EffectDTO
 from application.dto.encoder import EncoderDTO
 from application.errors.pipeline import PipelineError
-from core.encoders.default_encoder import DefaultEncoder
+from core.encoders.rgbm import RGBMEncoder
 from core.filters.blacklevel_filter import BlackLevelFilter
 from core.filters.exposure_filter import ExposureFilter
 from core.filters.gamma_filter import GammaFilter
@@ -20,17 +20,36 @@ class PipelineUseCase:
         self._pipeline = ImagePipeline()
         self._reader = ImageReader()
         self._writer = ImageWriter()
-        self._encoder = DefaultEncoder()
+        self._encoder = RGBMEncoder()
+        self._output_fmts: set[AvailableOutputFormat] = set()
+
+    def add_fmt(self, new: AvailableOutputFormat):
+        self._output_fmts.add(new)
+
+    def remove_fmt(self, to_remove: AvailableOutputFormat):
+        self._output_fmts.discard(to_remove)
+
+    def toggle_fmt(self, fmt: AvailableOutputFormat):
+        if fmt in self._output_fmts:
+            self.remove_fmt(fmt)
+        else:
+            self.add_fmt(fmt)
+
+    def get_output_fmt(self) -> list[AvailableOutputFormat]:
+        return list(self._output_fmts)
+
+    def get_available_fmt(self) -> list[AvailableOutputFormat]:
+        return [AvailableOutputFormat.DDS, AvailableOutputFormat.PNG]
 
     def set_encoder(self, encoder: AvailableEncoders) -> PipelineError | None:
         e = None
         match encoder:
-            case AvailableEncoders.RGBE:
-                e = DefaultEncoder()
-            case AvailableEncoders.LOG_LUV:
-                e = DefaultEncoder()
+            # case AvailableEncoders.RGBE:
+            #   e = DefaultEncoder()
+            # case AvailableEncoders.LOG_LUV:
+            #    e = DefaultEncoder()
             case AvailableEncoders.RGBM:
-                e = DefaultEncoder()
+                e = RGBMEncoder()
         if e is None:
             return PipelineError.INVALID_ENCODER_ERROR
 
@@ -39,8 +58,8 @@ class PipelineUseCase:
 
     def get_available_encoders(self) -> list[AvailableEncoders]:
         return [
-            AvailableEncoders.RGBE,
-            AvailableEncoders.LOG_LUV,
+            # AvailableEncoders.RGBE,
+            # AvailableEncoders.LOG_LUV,
             AvailableEncoders.RGBM,
         ]
 
@@ -120,9 +139,10 @@ class PipelineUseCase:
         if not updated:
             return PipelineError.INVALID_INPUT_VALUE_ERROR
 
-    def execute(
-        self, image_path: str, out_fmts: list[AvailableOutputFormat], output_dir: str
-    ) -> PipelineError | None:
+    def execute(self, image_path: str, output_dir: str) -> PipelineError | None:
+        if len(self._output_fmts) < 1:
+            return PipelineError.NEED_OUTPUT_FORMAT_ERROR
+
         image = self._reader.from_file(image_path)
         if image is None:
             return PipelineError.READ_IMAGE_ERROR
@@ -131,7 +151,7 @@ class PipelineUseCase:
 
         res = self._encoder.encode(res)
 
-        for fmt in out_fmts:
+        for fmt in self._output_fmts:
             written = self._write_image(res, fmt, output_dir)
 
             if not written:

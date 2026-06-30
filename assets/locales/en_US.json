@@ -1,58 +1,95 @@
 {
-  "themes": {
-    "default": "Default",
-    "amethyst": "Amethyst"
-  },
   "languages": {
     "en_US": "English (US)",
     "pt_BR": "Brazilian Portuguese"
   },
-  "ui": {
-    "menu": {
-      "theme": "Theme",
-      "settings": "Settings",
-      "language": "Language"
+  "pipeline": {
+    "errors": {
+      "COULD_NOT_SWAP_ERROR": "Failed to swap effects",
+      "EFFECT_INPUT_NOT_FOUND_ERROR": "Effect input not found",
+      "EFFECT_NOT_FOUND_ERROR": "Effect not found",
+      "FAIL_TO_WRITE_ERROR": "Failed to write image",
+      "INVALID_EFFECT": "Effect unknown",
+      "INVALID_ENCODER_ERROR": "Unknown Encoder",
+      "INVALID_INPUT_VALUE_ERROR": "Invalid input value",
+      "NEED_OUTPUT_FORMAT_ERROR": "At least one image output format is needed",
+      "READ_IMAGE_ERROR": "Failed to read image",
+      "REMOVE_EFFECT_ERROR": "Failed to remove the effect",
+      "title": "Fail to execute"
     },
+    "success": "Images encoded!",
+    "title": "Pipeline"
+  },
+  "themes": {
+    "amethyst": "Amethyst",
+    "default": "Default"
+  },
+  "ui": {
     "home": {
-      "path_list": {
-        "label": "Images to Convert",
-        "add_images_dialog": "Please select the images to add",
-        "add_image_dir_dialog": "Please select the directory of images",
-        "image_files": "Image Files",
-        "images_dir": "Directory",
-        "add_images": "Add Images",
-        "add_dir": "Add Directory"
-      },
       "effect_list": {
-        "label": "Effects to Run",
+        "add": "Add Effect",
         "effect": {
-          "EXPOSURE": {
-            "name": "Exposure",
+          "BLACK_LEVEL": {
             "inputs": {
-              "input": "Input"
-            }
+              "black_level": "Black Level"
+            },
+            "name": "Black Level"
           },
-          "SATURATION": { "name": "Saturation", "inputs": {} },
-          "GAMMA": { "name": "Gamma", "inputs": {} },
-          "BLACK_LEVEL": { "name": "Black Level", "inputs": {} }
+          "EXPOSURE": {
+            "inputs": {
+              "exposure": "Exposure"
+            },
+            "name": "Exposure"
+          },
+          "GAMMA": {
+            "inputs": {
+              "gamma": "Gamma"
+            },
+            "name": "Gamma"
+          },
+          "SATURATION": {
+            "inputs": {
+              "saturation": "Saturation"
+            },
+            "name": "Saturation"
+          }
         },
-        "add": "Add Effect"
+        "label": "Effects to Run"
       },
       "encoders": {
-        "label": "Encoders",
-        "RGBM": {
-          "name": "RGBM",
-          "inputs": {}
+        "LOG_LUV": {
+          "inputs": {},
+          "name": "LogLuv"
         },
         "RGBE": {
-          "name": "RGBE",
-          "inputs": {}
+          "inputs": {},
+          "name": "RGBE"
         },
-        "LOG_LUV": {
-          "name": "LogLuv",
-          "inputs": {}
-        }
+        "RGBM": {
+          "inputs": {
+            "coefficient": "Coefficient"
+          },
+          "name": "RGBM"
+        },
+        "label": "Encoders"
+      },
+      "execute": {
+        "run": "Run"
+      },
+      "path_list": {
+        "add_dir": "Add Directory",
+        "add_image_dir_dialog": "Please select the directory of images",
+        "add_images": "Add Images",
+        "add_images_dialog": "Please select the images to add",
+        "image_files": "Image Files",
+        "images_dir": "Directory",
+        "label": "Images to Convert"
       }
+    },
+    "menu": {
+      "language": "Language",
+      "settings": "Settings",
+      "theme": "Theme"
     }
   }
 }

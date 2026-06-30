@@ -8,9 +8,11 @@ from interface.gui.model.image_list import ImageListModel
 from interface.gui.model.pipeline import PipelineModel
 from interface.gui.view.widgets.effect_list import EffectList
 from interface.gui.view.widgets.encoder import Encoder
+from interface.gui.view.widgets.execute import Execute
 from interface.gui.view.widgets.image_list import ImageList
 from interface.gui.viewmodel.effect_list import EffectListViewModel
 from interface.gui.viewmodel.encoder import EncoderViewModel
+from interface.gui.viewmodel.execute import ExecuteViewModel
 from interface.gui.viewmodel.home_screen import HomeScreenViewModel
 from interface.gui.viewmodel.image_list import ImageListViewModel
 
@@ -25,7 +27,9 @@ class HomeScreen(QWidget):
         self._layout.setContentsMargins(8, 8, 8, 8)
 
         pipeline_model = PipelineModel()
-        image_list_widget_view_model = ImageListViewModel(ImageListModel())
+        image_list_model = ImageListModel()
+
+        image_list_widget_view_model = ImageListViewModel(image_list_model)
         self._image_list_widget = ImageList(
             self._view_model, image_list_widget_view_model, self
         )
@@ -36,12 +40,15 @@ class HomeScreen(QWidget):
         )
 
         encoder_view_model = EncoderViewModel(pipeline_model)
-
         self._encoders = Encoder(self._view_model, encoder_view_model)
+
+        execute_view_model = ExecuteViewModel(pipeline_model, image_list_model)
+        self._execute = Execute(self._view_model, execute_view_model)
 
         self._layout.addWidget(self._image_list_widget, 0, 0, 5, 2)
         self._layout.addWidget(self._effect_list_widget, 0, 2, 5, 2)
-        self._layout.addWidget(self._encoders, 6, 0, 1, 2)
+        self._layout.addWidget(self._encoders, 6, 0, 1, 1)
+        self._layout.addWidget(self._execute, 6, 1, 1, 1)
 
         self._layout.setColumnStretch(0, 1)
         self._layout.setColumnStretch(2, 1)
