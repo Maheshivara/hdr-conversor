@@ -9,10 +9,13 @@ CLI_HINT_TOKENS = {
     "--output",
     "--format_out",
     "--rgbm_coe",
+    "-eef",
     "--eef",
     "--exposure",
+    "-eblf",
     "--eblf",
     "--black_level",
+    "-esf",
     "--esf",
     "--saturation",
 }
