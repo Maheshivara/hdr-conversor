@@ -30,6 +30,52 @@ The group of contributors:
     ```sh
     uv run src/main.py
     ```
+
+## CLI Mode
+
+The project now supports a CLI mode that keeps the same conversion pipeline used by the GUI.
+
+You can run CLI in two ways:
+- Explicit mode selector:
+    ```sh
+    uv run src/main.py cli [options]
+    ```
+- Directly with CLI flags (auto-detected):
+    ```sh
+    uv run src/main.py --image "C:/path/to/file.hdr" [options]
+    ```
+
+At least one input source is required: `--image` or `--directory`.
+
+### CLI Parameters
+
+- `--image PATH` (repeatable): Input image file (`.hdr` or `.exr`)
+- `--directory PATH`: Input directory (loads supported files from top-level only)
+- `--output PATH`: Output directory (default: Pictures folder when available)
+- `--format_out png dds`: Required output format(s). No default value.
+- `--rgbm_coe FLOAT`: RGBM coefficient. Default: `8.0`
+
+Optional effect filters:
+- `-eef [VALUE]` or `--exposure [VALUE]`: Enable Exposure Filter. If `VALUE` is omitted, default is `0.0`.
+- `-eblf [VALUE]` or `--black_level [VALUE]`: Enable Black Level Filter. If `VALUE` is omitted, default is `0.1`.
+- `-esf [VALUE]` or `--saturation [VALUE]`: Enable Saturation Filter. If `VALUE` is omitted, default is `1.0`.
+
+### CLI Examples
+
+Convert one image to PNG:
+```sh
+uv run src/main.py cli --image "C:/images/input.hdr" --format_out png
+```
+
+Convert a directory to DDS using a custom RGBM coefficient:
+```sh
+uv run src/main.py cli --directory "C:/images" --format_out dds --rgbm_coe 6.5
+```
+
+Convert using both output formats and filters:
+```sh
+uv run src/main.py cli --directory "C:/images" --format_out png dds --exposure 1.5 --black_level 0.08 --saturation 1.2
+```
 ## How to Build
 
 > [!IMPORTANT]  
